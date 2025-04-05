@@ -15,7 +15,9 @@ class DailyReminder extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CheckboxSet(),
+            CheckboxSet(text: 'Water Plant'),
+            CheckboxSet(text: 'Send Message'),
+            CheckboxSet(text: 'Clean Pot'),
             ElevatedButton(
               onPressed: () {
                 // Placeholder for navigation
@@ -43,7 +45,9 @@ class DailyReminder extends StatelessWidget {
 }
 
 class CheckboxSet extends StatefulWidget {
-  const CheckboxSet({super.key});
+  final String text;
+
+  const CheckboxSet({super.key, required this.text});
 
   @override
   State<CheckboxSet> createState() => _CheckboxState();
@@ -74,16 +78,25 @@ class _CheckboxState extends State<CheckboxSet> {
       return Colors.red;
     }
 
-    return Checkbox(
-      // Change to fit theme
-      checkColor: Colors.white,
-      fillColor: WidgetStateProperty.resolveWith(getColor),
-      value: isChecked,
-      onChanged: (bool? value){
-        setState(() {
-          isChecked = value!;
-        });
-      },
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Checkbox(
+          checkColor: Colors.white,
+          fillColor: MaterialStateProperty.resolveWith(getColor),
+          value: isChecked,
+          onChanged: (bool? value) {
+            setState(() {
+              isChecked = value!;
+            });
+          },
+        ),
+        Text(
+          widget.text,
+          style: const TextStyle(fontSize: 16),
+        ),
+      ],
     );
   }
 }
+
