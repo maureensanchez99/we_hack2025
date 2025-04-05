@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'daily_reminder.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -15,6 +16,11 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SvgPicture.asset(
+              'assets/images/logo.svg',
+              height: 150,
+            ),
+            const SizedBox(height: 20),
             const Text(
               'Welcome',
               style: TextStyle(
@@ -33,22 +39,39 @@ class WelcomeScreen extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 75),
+              child: TextField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    labelText: "Enter your plant's new name",
+                    hintText: 'e.g. Sunny, Honey, Alex',
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+              ),
+            ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Placeholder for navigation
                 Navigator.push(context, MaterialPageRoute(builder: (_) => DailyReminder()));
               },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
+                padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
                 backgroundColor: brownText,
-                foregroundColor: greenBg,
+                foregroundColor: Colors.white,
                 elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),  
+                ),
               ),
               child: const Text(
                 'Continue',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
