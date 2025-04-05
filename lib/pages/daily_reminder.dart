@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:we_hack2025/pages/flower_pick_page.dart';
 
 class DailyReminder extends StatelessWidget {
   const DailyReminder({super.key});
@@ -37,6 +38,12 @@ class DailyReminder extends StatelessWidget {
                 ),
               ),
             ),
+            ElevatedButton(onPressed: () {
+              Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => FlowerPick()),
+                  );
+            }, child: Text("Annika's Page"))
           ],
         ),
       ),
