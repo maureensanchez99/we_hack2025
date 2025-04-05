@@ -54,6 +54,12 @@ class _CheckboxState extends State<CheckboxSet> {
 
   @override
   Widget build(BuildContext context){
+
+    // person.name = 'Shilpa';
+    // String newString = 'This is my name: ${person.name}';
+
+    String 
+
     Color getColor(Set<WidgetState> states) {
       const Set<WidgetState> interactiveStates = <WidgetState> {
         WidgetState.pressed,
@@ -77,7 +83,7 @@ class _CheckboxState extends State<CheckboxSet> {
         setState(() {
           isChecked = value!;
         });
-      }
+      },
     );
   }
 }
