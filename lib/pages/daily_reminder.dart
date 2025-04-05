@@ -60,7 +60,7 @@ class _CheckboxState extends State<CheckboxSet> {
 
     String 
 
-    Color getColor(Set<WidgetState> states) {
+    Color; getColor(Set<WidgetState> states) {
       const Set<WidgetState> interactiveStates = <WidgetState> {
         WidgetState.pressed,
         WidgetState.hovered,
