@@ -19,6 +19,7 @@ dependencies:
     sdk: flutter
   flutter_svg: ^2.0.9
   cupertino_icons: ^1.0.8
+  shared_preferences: ^2.0.15 
 
 dev_dependencies:
   flutter_test:
@@ -32,3 +33,64 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+  fonts: 
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter_18pt-Black.ttf 
+        - asset: assets/fonts/Inter_18pt-BlackItalic.ttf 
+          style: italic
+        - asset: assets/fonts/Inter_18pt-Bold.ttf 
+          weight: 700
+        - asset: assets/fonts/Inter_18pt-BoldItalic.ttf 
+          style: italic
+          weight: 700 
+        - asset: assets/fonts/Inter_18pt-ExtraBold.ttf 
+          weight: 800  
+        - asset: assets/fonts/Inter_18pt-ExtraBoldItalic.ttf 
+          style: italic
+          weight: 800  
+        - asset: assets/fonts/Inter_18pt-Italic.ttf 
+          style: italic 
+        - asset: assets/fonts/Inter_18pt-Light.ttf 
+          weight: 300  
+        - asset: assets/fonts/Inter_18pt-LightItalic.ttf 
+          style: italic
+          weight: 300   
+
+        - asset: assets/fonts/Inter_24pt-Black.ttf 
+        - asset: assets/fonts/Inter_24pt-BlackItalic.ttf 
+          style: italic
+        - asset: assets/fonts/Inter_24pt-Bold.ttf 
+          weight: 700
+        - asset: assets/fonts/Inter_24pt-BoldItalic.ttf 
+          style: italic
+          weight: 700 
+        - asset: assets/fonts/Inter_24pt-ExtraBold.ttf 
+          weight: 800  
+        - asset: assets/fonts/Inter_24pt-ExtraBoldItalic.ttf 
+          style: italic
+          weight: 800  
+        - asset: assets/fonts/Inter_24pt-Italic.ttf 
+          style: italic 
+        - asset: assets/fonts/Inter_24pt-Light.ttf 
+          weight: 300  
+        - asset: assets/fonts/Inter_24pt-LightItalic.ttf 
+          style: italic
+          weight: 300 
+
+        - asset: assets/fonts/Inter_28pt-Black.ttf 
+        - asset: assets/fonts/Inter_28pt-BlackItalic.ttf 
+          style: italic
+        - asset: assets/fonts/Inter_28pt-Bold.ttf 
+          weight: 700
+        - asset: assets/fonts/Inter_28pt-BoldItalic.ttf 
+          style: italic
+          weight: 700 
+        - asset: assets/fonts/Inter_28pt-ExtraBold.ttf 
+          weight: 800  
+        - asset: assets/fonts/Inter_28pt-Italic.ttf 
+          style: italic  
+        - asset: assets/fonts/Inter_28pt-LightItalic.ttf 
+          style: italic
+          weight: 300 
+       
