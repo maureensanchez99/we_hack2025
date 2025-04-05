@@ -12,11 +12,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'PFT Scavenger Hunt',
+      title: 'Mindful Reminders',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF461D7C)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFD7EAB4)),
         useMaterial3: true,
-        fontFamily: 'ProximaNova',
+        fontFamily: 'Inter', // Set global font family to Inter
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontFamily: 'Inter'),
+          bodyMedium: TextStyle(fontFamily: 'Inter'),
+          bodySmall: TextStyle(fontFamily: 'Inter'),
+          headlineLarge: TextStyle(fontFamily: 'Inter'),
+          headlineMedium: TextStyle(fontFamily: 'Inter'),
+          headlineSmall: TextStyle(fontFamily: 'Inter'),
+        ),
       ),
       home: const WelcomeScreen(),
     );
