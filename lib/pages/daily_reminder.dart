@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+//import 'package:flutter_svg/flutter_svg.dart';
 
 class DailyReminder extends StatelessWidget {
   const DailyReminder({super.key});
@@ -62,9 +62,7 @@ class _CheckboxState extends State<CheckboxSet> {
     // person.name = 'Shilpa';
     // String newString = 'This is my name: ${person.name}';
 
-    String 
-
-    Color; getColor(Set<WidgetState> states) {
+    getColor(Set<WidgetState> states) {
       const Set<WidgetState> interactiveStates = <WidgetState> {
         WidgetState.pressed,
         WidgetState.hovered,
@@ -72,18 +70,18 @@ class _CheckboxState extends State<CheckboxSet> {
       };
       if(states.any(interactiveStates.contains)){
         // Change to fit theme
-        return Colors.blue;
+        return Color(0xFF4F2027);
       }
       // Change to fit theme
-      return Colors.red;
+      return Color(0xFF4F2027);
     }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Checkbox(
-          checkColor: Colors.white,
-          fillColor: MaterialStateProperty.resolveWith(getColor),
+          checkColor: Color(0xFFD7EAB4),
+          fillColor: WidgetStateProperty.resolveWith(getColor),
           value: isChecked,
           onChanged: (bool? value) {
             setState(() {
