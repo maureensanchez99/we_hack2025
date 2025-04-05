@@ -24,7 +24,7 @@ class WelcomeScreen extends StatelessWidget {
             const Text(
               'Welcome',
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: brownText,
               ),
@@ -33,7 +33,7 @@ class WelcomeScreen extends StatelessWidget {
             const Text(
               "Let's provide your plant a name!",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w300,
                 color: brownText,
               ),
@@ -60,7 +60,7 @@ class WelcomeScreen extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => DailyReminder()));
               },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                 backgroundColor: brownText,
                 foregroundColor: Colors.white,
                 elevation: 0,
@@ -71,7 +71,7 @@ class WelcomeScreen extends StatelessWidget {
               child: const Text(
                 'Continue',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
