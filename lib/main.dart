@@ -12,11 +12,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'PFT Scavenger Hunt',
+      title: 'Mindful Reminders',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF461D7C)),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFFD7EAB4)),
         useMaterial3: true,
-        fontFamily: 'ProximaNova',
       ),
       home: const WelcomeScreen(),
     );

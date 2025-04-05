@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'daily_reminder.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+class DailyReminder extends StatelessWidget {
+  const DailyReminder({super.key});
 
   static const Color greenBg = Color(0xFFD7EAB4);
   static const Color brownText = Color(0xFF4F2027);
@@ -15,29 +15,10 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Welcome',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: brownText,
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "Let's provide your plant a name!",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w300,
-                color: brownText,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 25),
             ElevatedButton(
               onPressed: () {
                 // Placeholder for navigation
-                Navigator.push(context, MaterialPageRoute(builder: (_) => DailyReminder()));
+                // Navigator.push(context, MaterialPageRoute(builder: (_) => NextPage()));
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
