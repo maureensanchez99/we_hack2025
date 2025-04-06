@@ -14,6 +14,9 @@ class ViewFlowerPage extends StatefulWidget {
 
 class _ViewFlowerPageState extends State<ViewFlowerPage> {
   String plantName = '';
+  int completedTasks = 0; // Number of completed tasks
+  int daysPassed = 0; // Number of days passed
+  String selectedFlower = 'Sunflower'; // Default flower
   int _selectedIndex = 1; // Default index for "View Flower"
 
   void sendWater() async {
@@ -40,15 +43,31 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
   @override
   void initState() {
     super.initState();
-    _loadPlantName();
+    _loadPlantData();
   }
 
-  // Load the saved plant name from SharedPreferences
-  Future<void> _loadPlantName() async {
+  // Load the saved plant data from SharedPreferences
+  Future<void> _loadPlantData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       plantName = prefs.getString('plantName') ?? 'Your Plant';
+      completedTasks = prefs.getInt('completedTasks') ?? 0;
+      daysPassed = prefs.getInt('daysPassed') ?? 0;
+      selectedFlower = prefs.getString('selectedFlower') ?? 'Sunflower';
     });
+  }
+
+  // Determine the stage of the plant and return the corresponding SVG file
+  String _getPlantStageSvg() {
+    if (daysPassed >= 7 && completedTasks >= 20) {
+      return 'assets/images/$selectedFlower/full_grown.svg'; // Fully grown
+    } else if (daysPassed >= 5 && completedTasks >= 15) {
+      return 'assets/images/$selectedFlower/youngling.svg'; // Almost there
+    } else if (daysPassed >= 3 && completedTasks >= 7) {
+      return 'assets/images/$selectedFlower/seedling.svg'; // Taking root
+    } else {
+      return 'assets/images/pot.svg'; // Default pot
+    }
   }
 
   void _onItemTapped(int index) {
@@ -72,42 +91,16 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
             Text(
               plantName,
               style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
+                fontSize: 32, // Adjusted font size to match the reference
+                fontWeight: FontWeight.bold, // Adjusted font weight
                 color: DailyReminder.brownText, // Set brown text color
               ),
             ),
-            const SizedBox(height: 100),
+            const SizedBox(height: 60), // Adjusted spacing between plant name and SVG
+            // SVG Display
             SvgPicture.asset(
-              'assets/images/pot.svg',
-              height: 150,
-            ),
-            const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(
-                      "days until your plant reaches the next stage!",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: DailyReminder.brownText, // Set brown text color
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      "Your plant is currently in the {pull state} stage.\n",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: DailyReminder.brownText, // Set brown text color
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _getPlantStageSvg(), // Display the appropriate SVG
+              height: 200, // Adjusted SVG size to match the reference
             ),
           ],
         ),
