@@ -81,15 +81,6 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
                         color: DailyReminder.brownText, // Set brown text color
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Text(
-                      "Your plant is currently in the {pull state} stage.\n",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: DailyReminder.brownText, // Set brown text color
-                      ),
-                    ),
                   ],
                 ),
               ),
