@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'daily_reminder.dart';
 import 'tutorial_page.dart';
 import 'messages_page.dart';
@@ -11,7 +12,7 @@ class ViewFlowerPage extends StatefulWidget {
 
 class _ViewFlowerPageState extends State<ViewFlowerPage> {
   String plantName = '';
-  int _selectedIndex = 1; // Set the default index to 1 for "View Flower"
+  int _selectedIndex = 1;  
 
   final List<Widget> _pages = [
     const DailyReminder(),
@@ -51,19 +52,27 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              "View Flower Page!",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+            Text(
+              "$plantName",
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w800,
               ),
             ),
-            const SizedBox(height: 20),
-            Text(
-              "Plant Name: $plantName",
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
+            SizedBox(height: 20),
+            SvgPicture.asset(
+              'assets/images/pot.svg',
+              height: 150,
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: const Text(
+                "days until your plant reaches the next stage!",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],
