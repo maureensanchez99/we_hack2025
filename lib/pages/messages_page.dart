@@ -371,7 +371,7 @@ class _MessagePageState extends State<MessagesPage> with SingleTickerProviderSta
             body: TabBarView(
               children: [
                 Container(
-                  decoration: BoxDecoration(color: Color(0xFF4F2027)),
+                  decoration: BoxDecoration(color: Color(0xFF4F5D2F)),
                   child: itemsMap.isEmpty
                       ? Center(child: Text("No messages available", style: TextStyle(color: Colors.white)))
                       : ListView(
