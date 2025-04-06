@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'daily_reminder.dart';
 import 'tutorial_page.dart';
 import 'messages_page.dart';
+import 'flower_pick_page.dart';
 
 class ViewFlowerPage extends StatefulWidget {
   @override

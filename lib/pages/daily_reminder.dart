@@ -68,15 +68,6 @@ class DailyReminderHome extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => FlowerPickPage()),
-                );
-              },
-              child: Text("Annika's Page"),
-            )
           ],
         ),
       ),

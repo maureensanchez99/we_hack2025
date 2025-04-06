@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 import 'daily_reminder.dart';
 import 'view_flower_page.dart';
 import 'tutorial_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class MessagesPage extends StatefulWidget {
   @override
@@ -11,21 +11,8 @@ class MessagesPage extends StatefulWidget {
 }
 
 class _MessagesPageState extends State<MessagesPage> with SingleTickerProviderStateMixin {
-  int _selectedIndex = 3;
-
-  final List<Widget> _pages = [
-    const DailyReminder(),
-    ViewFlowerPage(),
-    TutorialPage(),
-    MessagesPage(),
-  ];
-
-  Map<DateTime, String> itemsMap = {
-    DateTime(2025, 4, 5, 9, 0): "Loading Message 1...",
-    DateTime(2025, 4, 5, 10, 0): "Loading Message 2...",
-  };
+  int _selectedIndex = 3; // Default index for "Message Maker"
   Map<DateTime, String> unseenMessages = {
-    DateTime(2025, 4, 6, 11, 0): "Unseen Message 1",
     DateTime(2025, 4, 6, 12, 0): "Unseen Message 2",
   };
   Map<DateTime, String> futureEntries = {};
@@ -35,68 +22,22 @@ class _MessagesPageState extends State<MessagesPage> with SingleTickerProviderSt
   DateTime? selectedDateTime;
   final ValueNotifier<bool> dataChangedNotifier = ValueNotifier(false);
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => _pages[index]),
-    );
-  }
+  final List<Widget> _pages = [
+    const DailyReminder(),
+    ViewFlowerPage(),
+    TutorialPage(),
+    MessagesPage(),
+  ];
 
   @override
   void initState() {
     super.initState();
     initializePreferences();
-    startPeriodicCheck();
   }
 
   Future<void> initializePreferences() async {
     prefs = await SharedPreferences.getInstance();
-    await loadItems();
-    await loadFutureEntries();
     await loadUnseenMessages();
-    checkExpiredEntries();
-  }
-
-  void startPeriodicCheck() {
-    Future.delayed(Duration(seconds: 5), () {
-      checkExpiredEntries();
-      startPeriodicCheck();
-    });
-  }
-
-  Future<void> loadItems() async {
-    String? itemsMapJson = prefs.getString("itemsMap");
-    if (itemsMapJson == null) {
-      Map<DateTime, String> defaultItems = {
-        DateTime(2025, 4, 6, 10, 0): "Default Message 1",
-        DateTime(2025, 4, 7, 12, 30): "Default Message 2",
-      };
-      setState(() {
-        itemsMap = defaultItems;
-      });
-      prefs.setString(
-        "itemsMap",
-        jsonEncode(defaultItems.map((key, value) => MapEntry(key.toIso8601String(), value))),
-      );
-    } else {
-      Map<String, dynamic> decodedMap = jsonDecode(itemsMapJson);
-      setState(() {
-        itemsMap = decodedMap.map((key, value) => MapEntry(DateTime.parse(key), value as String));
-      });
-    }
-  }
-
-  Future<void> loadFutureEntries() async {
-    String? futureEntriesJson = prefs.getString("futureEntries");
-    if (futureEntriesJson != null) {
-      Map<String, dynamic> decodedMap = jsonDecode(futureEntriesJson);
-      setState(() {
-        futureEntries = decodedMap.map((key, value) => MapEntry(DateTime.parse(key), value as String));
-      });
-    }
   }
 
   Future<void> loadUnseenMessages() async {
@@ -109,13 +50,6 @@ class _MessagesPageState extends State<MessagesPage> with SingleTickerProviderSt
     }
   }
 
-  void saveFutureEntries() {
-    prefs.setString(
-      "futureEntries",
-      jsonEncode(futureEntries.map((key, value) => MapEntry(key.toIso8601String(), value))),
-    );
-  }
-
   void saveUnseenMessages() {
     prefs.setString(
       "unseenMessages",
@@ -123,66 +57,15 @@ class _MessagesPageState extends State<MessagesPage> with SingleTickerProviderSt
     );
   }
 
-  void checkExpiredEntries() {
-    DateTime now = DateTime.now();
-    List<DateTime> expiredKeys = [];
-    futureEntries.forEach((key, value) {
-      if (key.isBefore(now)) {
-        expiredKeys.add(key);
-        unseenMessages[key] = value;
-      }
-    });
-    if (expiredKeys.isNotEmpty) {
-      for (DateTime key in expiredKeys) {
-        futureEntries.remove(key);
-      }
-      saveFutureEntries();
-      saveUnseenMessages();
-      dataChangedNotifier.value = !dataChangedNotifier.value;
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Some entries have been moved to the inbox."),
-          ),
-        );
-      }
-    }
-  }
-
-  void addFutureEntry(DateTime dateTime, String message) {
-    setState(() {
-      futureEntries[dateTime] = message;
-      saveFutureEntries();
-    });
-  }
-
-  void markMessageAsSeen(DateTime key) {
-    setState(() {
-      String? message = unseenMessages.remove(key);
-      if (message != null) {
-        itemsMap[key] = message;
-        saveUnseenMessages();
-        prefs.setString(
-          "itemsMap",
-          jsonEncode(itemsMap.map((key, value) => MapEntry(key.toIso8601String(), value))),
-        );
-      }
-    });
-  }
-
   void submitMessage() {
     if (messageController.text.isNotEmpty && selectedDateTime != null) {
       setState(() {
         if (selectedDateTime!.isAfter(DateTime.now())) {
           futureEntries[selectedDateTime!] = messageController.text;
-          saveFutureEntries();
         } else {
-          itemsMap[selectedDateTime!] = messageController.text;
-          prefs.setString(
-            "itemsMap",
-            jsonEncode(itemsMap.map((key, value) => MapEntry(key.toIso8601String(), value))),
-          );
+          unseenMessages[selectedDateTime!] = messageController.text;
         }
+        saveUnseenMessages();
         messageController.clear();
         selectedDateTime = null;
       });
@@ -215,63 +98,135 @@ class _MessagesPageState extends State<MessagesPage> with SingleTickerProviderSt
     }
   }
 
-  void removeItem(DateTime key) {
+  void _onItemTapped(int index) {
     setState(() {
-      itemsMap.remove(key);
-      prefs.setString(
-        "itemsMap",
-        jsonEncode(itemsMap.map((key, value) => MapEntry(key.toIso8601String(), value))),
-      );
+      _selectedIndex = index;
     });
-  }
-
-  void resetToDummyValues() {
-    Map<DateTime, String> dummyValues = {
-      DateTime(2025, 4, 5, 9, 0): "Loading Message 1...",
-      DateTime(2025, 4, 5, 10, 0): "Loading Message 2...",
-    };
-    setState(() {
-      itemsMap = dummyValues;
-      prefs.setString(
-        "itemsMap",
-        jsonEncode(dummyValues.map((key, value) => MapEntry(key.toIso8601String(), value))),
-      );
-    });
-  }
-
-  void showItemDialog(DateTime key, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: const Color(0xFFD7EAB4),
-          title: Text("Message Details", style: TextStyle(color: const Color(0xFF4F2027))),
-          content: Text(message, style: TextStyle(color: const Color(0xFF4F2027))),
-          actions: [
-            TextButton(
-              onPressed: () {
-                removeItem(key);
-                Navigator.of(context).pop();
-              },
-              child: Text("Delete", style: TextStyle(color: Colors.red)),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text("Close", style: TextStyle(color: const Color(0xFF4F2027))),
-            ),
-          ],
-        );
-      },
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => _pages[index]),
     );
   }
 
-  // Remainder of build method and UI logic here...
-
   @override
   Widget build(BuildContext context) {
-    // Return UI widgets here...
-    return Scaffold(
-      body: Center(child: Text("Message Maker Page!")),
+    return ValueListenableBuilder(
+      valueListenable: dataChangedNotifier,
+      builder: (context, _, __) {
+        return Scaffold(
+          backgroundColor: const Color(0xFF4F2027),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Title Section
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                  child: Text(
+                    "Bloom Box",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFD7EAB4),
+                    ),
+                  ),
+                ),
+                // Inbox Section
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isInboxExpanded = !isInboxExpanded;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Text(
+                      isInboxExpanded ? "Inbox (Tap to Collapse)" : "Inbox (Tap to Expand)",
+                      style: const TextStyle(
+                        color: Color(0xFF4F2027),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                if (isInboxExpanded)
+                  ...unseenMessages.entries.map((entry) {
+                    return ListTile(
+                      title: Text(entry.value, style: const TextStyle(color: Colors.white)),
+                      subtitle: Text(entry.key.toString(), style: const TextStyle(color: Colors.grey)),
+                    );
+                  }).toList(),
+                const SizedBox(height: 16.0),
+                // Message Input Section
+                TextField(
+                  controller: messageController,
+                  decoration: InputDecoration(
+                    hintText: "Enter your message",
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: pickDateTime,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFF9ADA0),
+                  ),
+                  child: Text(
+                    selectedDateTime == null
+                        ? "Pick a Date and Time"
+                        : "Selected: ${selectedDateTime.toString()}",
+                    style: const TextStyle(color: Color(0xFF4F2027)),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: submitMessage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFF9ADA0),
+                  ),
+                  child: const Text(
+                    "Submit Message",
+                    style: TextStyle(color: Color(0xFF4F2027)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            backgroundColor: const Color(0xFFD7EAB4),
+            selectedItemColor: const Color(0xFFF9ADA0),
+            unselectedItemColor: const Color(0xFF4F2027),
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.check_box),
+                label: 'Daily Reminder',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.filter_vintage),
+                label: 'View Flower',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.info),
+                label: 'Tutorial',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.draw),
+                label: 'Message Maker',
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
