@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'view_flower_page.dart';
 
 class FlowerPickPage extends StatefulWidget {
   @override
@@ -210,8 +211,11 @@ class _FlowerPickPageState extends State<FlowerPickPage> {
                 onPressed: selectedFlower.isEmpty
                     ? null
                     : () {
-                        // Navigate to view flower page
-                        Navigator.pushNamed(context, '/view_flower');
+                        // Navigate to ViewFlowerPage
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => ViewFlowerPage()),
+                        );
                       },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),

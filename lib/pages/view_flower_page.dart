@@ -10,6 +10,17 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Text("View Flower Page!");
+    return Container(
+      child: Column(
+        children: [
+          Text(
+            "View Flower Page!"
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
+    );
   }
 }
