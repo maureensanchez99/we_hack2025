@@ -64,6 +64,7 @@ class DailyReminderHome extends StatelessWidget {
 class _DailyReminderState extends State<DailyReminder> {
   int _selectedIndex = 0;
 
+  //!SECTION Bottom Navigation Bar
   final List<Widget> _pages = [
     const DailyReminderHome(),
     ViewFlowerPage(),
