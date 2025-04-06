@@ -71,13 +71,26 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Center(
-                child: Text(
-                  "days until your plant reaches the next stage!",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    color: DailyReminder.brownText, // Set brown text color
-                  ),
+                child: Column(
+                  children: [
+                    Text(
+                      "days until your plant reaches the next stage!",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: DailyReminder.brownText, // Set brown text color
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Your plant is currently in the {pull state} stage.\n",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: DailyReminder.brownText, // Set brown text color
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
