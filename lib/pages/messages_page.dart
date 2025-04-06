@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'daily_reminder.dart';
 import 'view_flower_page.dart';
 import 'tutorial_page.dart';
+import 'bluetooth.dart';
 
 class MessagesPage extends StatefulWidget {
   @override
@@ -26,6 +27,13 @@ class _MessagesPageState extends State<MessagesPage> with SingleTickerProviderSt
   final TextEditingController messageController = TextEditingController();
   DateTime? selectedDateTime;
   final ValueNotifier<bool> dataChangedNotifier = ValueNotifier(false);
+
+  void sendMessageNotif() async {
+      final messenger = BluetoothMessenger();
+
+      // Send a single-character message (e.g., 'a')
+      await messenger.sendMessage("m");
+    }
 
   @override
   void initState() {
@@ -88,6 +96,7 @@ class _MessagesPageState extends State<MessagesPage> with SingleTickerProviderSt
     if (messageController.text.isNotEmpty && selectedDateTime != null) {
       setState(() {
         if (selectedDateTime!.isAfter(DateTime.now())) {
+          sendMessageNotif();
           futureEntries[selectedDateTime!] = messageController.text;
           saveFutureEntries();
         } else {
@@ -143,11 +152,13 @@ class _MessagesPageState extends State<MessagesPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+
     return ValueListenableBuilder(
       valueListenable: dataChangedNotifier,
       builder: (context, _, __) {
         return DefaultTabController(
           length: 3,
+          initialIndex: 1, 
           child: Scaffold(
             backgroundColor: const Color(0xFF4F2027),
             body: Column(

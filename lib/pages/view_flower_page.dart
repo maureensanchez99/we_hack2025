@@ -5,6 +5,7 @@ import 'daily_reminder.dart';
 import 'tutorial_page.dart';
 import 'messages_page.dart';
 import 'flower_pick_page.dart';
+import 'bluetooth.dart';
 
 class ViewFlowerPage extends StatefulWidget {
   @override
@@ -14,6 +15,20 @@ class ViewFlowerPage extends StatefulWidget {
 class _ViewFlowerPageState extends State<ViewFlowerPage> {
   String plantName = '';
   int _selectedIndex = 1; // Default index for "View Flower"
+
+  void sendWater() async {
+      final messenger = BluetoothMessenger();
+
+      // Send a single-character message (e.g., 'a')
+      await messenger.sendMessage("c");
+    }
+
+    void sendSun() async {
+      final messenger = BluetoothMessenger();
+
+      // Send a single-character message (e.g., 'a')
+      await messenger.sendMessage("y");
+    }
 
   final List<Widget> _pages = [
     const DailyReminder(),

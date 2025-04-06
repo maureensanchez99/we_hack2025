@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:we_hack2025/pages/messages_page.dart';
 import 'package:we_hack2025/pages/tutorial_page.dart';
 import 'package:we_hack2025/pages/view_flower_page.dart';
+import 'bluetooth.dart';
 
 class DailyReminder extends StatefulWidget {
   const DailyReminder({super.key});
@@ -25,6 +26,20 @@ class DailyReminderHome extends StatelessWidget {
       // Send a single-character message (e.g., 'a')
       await messenger.sendMessage("g");
     }*/
+
+    void sendSuccess() async {
+      final messenger = BluetoothMessenger();
+
+      // Send a single-character message (e.g., 'a')
+      await messenger.sendMessage("g");
+    }
+
+    void sendFail() async {
+      final messenger = BluetoothMessenger();
+
+      // Send a single-character message (e.g., 'a')
+      await messenger.sendMessage("r");
+    }
 
     return Scaffold(
       backgroundColor: DailyReminder.greenBg,
