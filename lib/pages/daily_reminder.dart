@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
-import 'package:we_hack2025/pages/flower_pick_page.dart';
 import 'package:we_hack2025/pages/messages_page.dart';
 import 'package:we_hack2025/pages/tutorial_page.dart';
 import 'package:we_hack2025/pages/view_flower_page.dart';
@@ -26,23 +24,26 @@ class DailyReminderHome extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Daily Reminders:', 
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: DailyReminder.brownText,
-                ),
+            Text(
+              'Daily Reminders:',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: DailyReminder.brownText,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 25),
-              child: Text('Ensure your plant is healthy and loved!',
-              style: TextStyle(
+              child: Text(
+                'Ensure your plant is healthy and loved!',
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w300,
                   color: DailyReminder.brownText,
-                ),),
+                ),
+              ),
             ),
-            CheckboxSet(text: 'Water Plant',),
+            CheckboxSet(text: 'Water Plant'),
             CheckboxSet(text: 'Send Message'),
             CheckboxSet(text: 'Clean Pot'),
             Padding(
@@ -50,10 +51,10 @@ class DailyReminderHome extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Placeholder for navigation
-                  // Navigator.push(context, MaterialPageRoute(builder: (_) => NextPage()));
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
                   backgroundColor: DailyReminder.brownText,
                   foregroundColor: DailyReminder.greenBg,
                   elevation: 0,
@@ -67,12 +68,15 @@ class DailyReminderHome extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(onPressed: () {
-              Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => FlowerPickPage()),
-                  );
-            }, child: Text("Annika's Page"))
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => FlowerPickPage()),
+                );
+              },
+              child: Text("Annika's Page"),
+            )
           ],
         ),
       ),
@@ -83,29 +87,41 @@ class DailyReminderHome extends StatelessWidget {
 class _DailyReminderState extends State<DailyReminder> {
   int _selectedIndex = 0;
 
-  //!SECTION Bottom Navigation Bar
   final List<Widget> _pages = [
-    const DailyReminderHome(),
+    const DailyReminder(),
     ViewFlowerPage(),
     TutorialPage(),
     MessagesPage(),
   ];
 
-  void _onItemTapped(int index){
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => _pages[index]),
+    );
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CheckboxSet(text: 'Water Plant'),
+            CheckboxSet(text: 'Send Message'),
+            CheckboxSet(text: 'Clean Pot'),
+          ],
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         backgroundColor: DailyReminder.greenBg,
-        selectedItemColor: Color(0xFFF9ADA0),
+        selectedItemColor: const Color(0xFFF9ADA0),
         unselectedItemColor: DailyReminder.brownText,
         items: const [
           BottomNavigationBarItem(
@@ -128,7 +144,6 @@ class _DailyReminderState extends State<DailyReminder> {
       ),
     );
   }
-
 }
 
 class CheckboxSet extends StatefulWidget {
@@ -144,22 +159,16 @@ class _CheckboxState extends State<CheckboxSet> {
   bool isChecked = false;
 
   @override
-  Widget build(BuildContext context){
-
-    // person.name = 'Shilpa';
-    // String newString = 'This is my name: ${person.name}';
-
+  Widget build(BuildContext context) {
     getColor(Set<WidgetState> states) {
-      const Set<WidgetState> interactiveStates = <WidgetState> {
+      const Set<WidgetState> interactiveStates = <WidgetState>{
         WidgetState.pressed,
         WidgetState.hovered,
         WidgetState.focused,
       };
-      if(states.any(interactiveStates.contains)){
-        // Change to fit theme
-        return Color(0xFFF9ADA0);
+      if (states.any(interactiveStates.contains)) {
+        return const Color(0xFFF9ADA0);
       }
-      // Change to fit theme
       return DailyReminder.brownText;
     }
 
@@ -176,20 +185,11 @@ class _CheckboxState extends State<CheckboxSet> {
             });
           },
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                widget.text,
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-          ],
+        Text(
+          widget.text,
+          style: const TextStyle(fontSize: 16),
         ),
       ],
     );
   }
 }
-
