@@ -26,25 +26,44 @@ class DailyReminderHome extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CheckboxSet(text: 'Water Plant'),
+            Text('Daily Reminders:', 
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: DailyReminder.brownText,
+                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 25),
+              child: Text('Ensure your plant is healthy and loved!',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w300,
+                  color: DailyReminder.brownText,
+                ),),
+            ),
+            CheckboxSet(text: 'Water Plant',),
             CheckboxSet(text: 'Send Message'),
             CheckboxSet(text: 'Clean Pot'),
-            ElevatedButton(
-              onPressed: () {
-                // Placeholder for navigation
-                // Navigator.push(context, MaterialPageRoute(builder: (_) => NextPage()));
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
-                backgroundColor: DailyReminder.brownText,
-                foregroundColor: DailyReminder.greenBg,
-                elevation: 0,
-              ),
-              child: const Text(
-                'Continue',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 25),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Placeholder for navigation
+                  // Navigator.push(context, MaterialPageRoute(builder: (_) => NextPage()));
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
+                  backgroundColor: DailyReminder.brownText,
+                  foregroundColor: DailyReminder.greenBg,
+                  elevation: 0,
+                ),
+                child: const Text(
+                  'Continue',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -138,17 +157,17 @@ class _CheckboxState extends State<CheckboxSet> {
       };
       if(states.any(interactiveStates.contains)){
         // Change to fit theme
-        return Colors.blue;
+        return Color(0xFFF9ADA0);
       }
       // Change to fit theme
-      return Colors.red;
+      return DailyReminder.brownText;
     }
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Checkbox(
-          checkColor: Colors.white,
+          checkColor: DailyReminder.greenBg,
           fillColor: WidgetStateProperty.resolveWith(getColor),
           value: isChecked,
           onChanged: (bool? value) {
