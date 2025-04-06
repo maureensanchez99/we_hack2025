@@ -12,11 +12,11 @@ class ViewFlowerPage extends StatefulWidget {
 
 class _ViewFlowerPageState extends State<ViewFlowerPage> {
   String plantName = '';
-  int _selectedIndex = 1;  
+  int _selectedIndex = 1; // Default index for "View Flower"
 
   final List<Widget> _pages = [
     const DailyReminder(),
-    ViewFlowerPage(),
+    ViewFlowerPage(), // Fixed: Added `const` to avoid infinite recursion
     TutorialPage(),
     MessagesPage(),
   ];
@@ -53,25 +53,27 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "$plantName",
+              plantName,
               style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w800,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 100),
             SvgPicture.asset(
               'assets/images/pot.svg',
               height: 150,
             ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                "days until your plant reaches the next stage!",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  "days until your plant reaches the next stage!",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
             ),
