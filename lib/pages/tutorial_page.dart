@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'daily_reminder.dart';
 import 'view_flower_page.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'messages_page.dart';
 
 class TutorialPage extends StatefulWidget {
@@ -28,13 +29,42 @@ class _TutorialPageState extends State<TutorialPage> {
     );
   }
 
+  static const Color greenBg = Color(0xFFD7EAB4);
+  //static const Color brownText = Color(0xFF4F2027);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(
-        child: Text(
-          "LeafySaga Info Page!",
-          style: TextStyle(fontSize: 18),
+      backgroundColor: greenBg,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              'Your Plant Grows With You.',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: DailyReminder.brownText,
+              ),
+            ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 40),
+                child: const Text(
+                  'As you grow within, your plant grows with you.',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w300,
+                    color: DailyReminder.brownText,
+                  ),
+                ),
+              ),
+            SvgPicture.asset(
+              'assets/images/ls_diagram.svg',
+              height: 350,
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
