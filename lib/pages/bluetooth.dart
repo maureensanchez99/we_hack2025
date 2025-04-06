@@ -122,6 +122,25 @@ class _BluetoothBleAppState extends State<BluetoothBleApp> {
     }
   }
 
+  void discoverServices() async {
+    if (_selectedDevice == null) {
+      print("No device selected.");
+      return;
+    }
+
+    final services = await _ble.discoverServices(_selectedDevice!.id);
+    for (var service in services) {
+      print('Service UUID: ${service.serviceId}');
+      for (var characteristic in service.characteristics) {
+        print('  Characteristic UUID: ${characteristic.characteristicId}');
+        print('  Properties: '
+            'read: ${characteristic.isReadable}, '
+            'write: ${characteristic.isWritableWithResponse || characteristic.isWritableWithoutResponse}, '
+            'notify: ${characteristic.isNotifiable}');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
