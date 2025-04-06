@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_hack2025/pages/messages_page.dart';
 import 'package:we_hack2025/pages/tutorial_page.dart';
 import 'package:we_hack2025/pages/view_flower_page.dart';
+import 'bluetooth.dart';
 
 class DailyReminder extends StatefulWidget {
   const DailyReminder({super.key});
@@ -25,6 +27,20 @@ class DailyReminderHome extends StatelessWidget {
       // Send a single-character message (e.g., 'a')
       await messenger.sendMessage("g");
     }*/
+
+    void sendSuccess() async {
+      final messenger = BluetoothMessenger();
+
+      // Send a single-character message (e.g., 'a')
+      await messenger.sendMessage("g");
+    }
+
+    void sendFail() async {
+      final messenger = BluetoothMessenger();
+
+      // Send a single-character message (e.g., 'a')
+      await messenger.sendMessage("r");
+    }
 
     return Scaffold(
       backgroundColor: DailyReminder.greenBg,
@@ -64,6 +80,7 @@ class DailyReminderHome extends StatelessWidget {
                 onPressed: () {
                   // Placeholder for navigation
                   // Navigator.push(context, MaterialPageRoute(builder: (_) => NextPage()));
+                  CheckboxManager().saveCheckboxStates();
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
@@ -72,7 +89,7 @@ class DailyReminderHome extends StatelessWidget {
                   elevation: 0,
                 ),
                 child: const Text(
-                  'Continue',
+                  'Save Changes',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -151,14 +168,15 @@ class CheckboxSet extends StatefulWidget {
 
 class _CheckboxState extends State<CheckboxSet> {
   bool isChecked = false;
+  final CheckboxManager manager = CheckboxManager();
 
   @override
   Widget build(BuildContext context) {
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
+    Color getColor(Set<WidgetState> states) {
+      const Set<WidgetState> interactiveStates = <WidgetState>{
+        WidgetState.pressed,
+        WidgetState.hovered,
+        WidgetState.focused,
       };
       if (states.any(interactiveStates.contains)) {
         return const Color(0xFFF9ADA0);
@@ -171,12 +189,19 @@ class _CheckboxState extends State<CheckboxSet> {
       children: [
         Checkbox(
           checkColor: DailyReminder.greenBg,
-          fillColor: MaterialStateProperty.resolveWith(getColor),
+          fillColor: WidgetStateProperty.resolveWith(getColor),
           value: isChecked,
-          onChanged: (bool? value) {
+          onChanged: (bool? value) async {
             setState(() {
-              isChecked = value!;
+              isChecked = value ?? false;
             });
+
+            if (isChecked) {
+              // Increment task count in SharedPreferences
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              int completedTasks = prefs.getInt('completedTasks') ?? 0;
+              prefs.setInt('completedTasks', completedTasks + 1);
+            }
           },
         ),
         Text(
@@ -185,5 +210,28 @@ class _CheckboxState extends State<CheckboxSet> {
         ),
       ],
     );
+  }
+}
+
+class CheckboxManager {
+  static final CheckboxManager _instance = CheckboxManager._internal();
+  factory CheckboxManager() => _instance;
+
+  CheckboxManager._internal();
+
+  Map<String, bool> checkboxStates = {};
+
+  void updateCheckboxState(String key, bool value) {
+    checkboxStates[key] = value;
+  }
+
+  bool getCheckboxState(String key) {
+    return checkboxStates[key] ?? false; // Default to false if the key doesn't exist
+  }
+
+  void saveCheckboxStates() {
+    checkboxStates.forEach((key, value) {
+      print('Checkbox $key is ${value ? "checked" : "unchecked"}');
+    });
   }
 }

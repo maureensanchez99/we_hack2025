@@ -5,6 +5,7 @@ import 'daily_reminder.dart';
 import 'tutorial_page.dart';
 import 'messages_page.dart';
 import 'flower_pick_page.dart';
+import 'bluetooth.dart';
 
 class ViewFlowerPage extends StatefulWidget {
   @override
@@ -13,43 +14,57 @@ class ViewFlowerPage extends StatefulWidget {
 
 class _ViewFlowerPageState extends State<ViewFlowerPage> {
   String plantName = '';
+  int completedTasks = 0; // Number of completed tasks
+  String selectedFlower = 'Sunflower'; // Default flower
   int _selectedIndex = 1; // Default index for "View Flower"
 
-  final List<Widget> _pages = [
-    const DailyReminder(),
-    ViewFlowerPage(),
-    TutorialPage(),
-    MessagesPage(),
-  ];
+  void sendWater() async {
+    final messenger = BluetoothMessenger();
+
+    // Send a single-character message (e.g., 'c' for water)
+    await messenger.sendMessage("c");
+  }
+
+  void sendSun() async {
+    final messenger = BluetoothMessenger();
+
+    // Send a single-character message (e.g., 'y' for sunlight)
+    await messenger.sendMessage("y");
+  }
 
   @override
   void initState() {
     super.initState();
-    _loadPlantName();
+    _loadPlantData();
   }
 
-  // Load the saved plant name from SharedPreferences
-  Future<void> _loadPlantName() async {
+  // Load the saved plant data from SharedPreferences
+  Future<void> _loadPlantData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       plantName = prefs.getString('plantName') ?? 'Your Plant';
+      completedTasks = prefs.getInt('completedTasks') ?? 0;
+      selectedFlower = prefs.getString('selectedFlower') ?? 'Sunflower';
     });
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => _pages[index]),
-    );
+  // Determine the stage of the plant and return the corresponding SVG file
+  String _getPlantStageSvg() {
+    if (completedTasks >= 20) {
+      return 'assets/images/$selectedFlower/full_grown.svg'; // Fully grown
+    } else if (completedTasks >= 15) {
+      return 'assets/images/$selectedFlower/youngling.svg'; // Almost there
+    } else if (completedTasks >= 7) {
+      return 'assets/images/$selectedFlower/seedling.svg'; // Taking root
+    } else {
+      return 'assets/images/pot.svg'; // Default pot
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: DailyReminder.greenBg, // Set green background
+      backgroundColor: DailyReminder.greenBg,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -57,41 +72,23 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
             Text(
               plantName,
               style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-                color: DailyReminder.brownText, // Set brown text color
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: DailyReminder.brownText,
               ),
             ),
-            const SizedBox(height: 100),
+            const SizedBox(height: 60),
             SvgPicture.asset(
-              'assets/images/pot.svg',
-              height: 150,
+              _getPlantStageSvg(),
+              height: 200,
             ),
             const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(
-                      "days until your plant reaches the next stage!",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: DailyReminder.brownText, // Set brown text color
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      "Your plant is currently in the {pull state} stage.\n",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: DailyReminder.brownText, // Set brown text color
-                      ),
-                    ),
-                  ],
-                ),
+            Text(
+              'Tasks Completed: $completedTasks',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                color: DailyReminder.brownText,
               ),
             ),
           ],
@@ -99,10 +96,23 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        backgroundColor: DailyReminder.greenBg, // Set green background
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => [
+              const DailyReminder(),
+              ViewFlowerPage(),
+              TutorialPage(),
+              MessagesPage(),
+            ][index]),
+          );
+        },
+        backgroundColor: DailyReminder.greenBg,
         selectedItemColor: const Color(0xFFF9ADA0),
-        unselectedItemColor: DailyReminder.brownText, // Set brown text color
+        unselectedItemColor: DailyReminder.brownText,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.check_box),
