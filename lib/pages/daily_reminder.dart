@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'bluetooth.dart';
-class DailyReminder extends StatelessWidget {
+import 'package:we_hack2025/pages/messages_page.dart';
+import 'package:we_hack2025/pages/tutorial_page.dart';
+import 'package:we_hack2025/pages/view_flower_page.dart';
+
+class DailyReminder extends StatefulWidget {
   const DailyReminder({super.key});
 
   static const Color greenBg = Color(0xFFD7EAB4);
   static const Color brownText = Color(0xFF4F2027);
+
+  @override
+  State<DailyReminder> createState() => _DailyReminderState();
+}
+
+class DailyReminderHome extends StatelessWidget {
+  const DailyReminderHome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,34 +27,163 @@ class DailyReminder extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: greenBg,
+      backgroundColor: DailyReminder.greenBg,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                // Placeholder for navigation
-                // Navigator.push(context, MaterialPageRoute(builder: (_) => NextPage()));
-                sendBlinkCommand();
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
-                backgroundColor: brownText,
-                foregroundColor: greenBg,
-                elevation: 0,
+            // Title
+            const Text(
+              'Daily Reminders:',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: DailyReminder.brownText,
               ),
-              child: const Text(
-                'Continue',
+            ),
+            // Subtitle
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 25),
+              child: Text(
+                'Ensure your plant is healthy and loved!',
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w300,
+                  color: DailyReminder.brownText,
+                ),
+              ),
+            ),
+            // Checkboxes
+            const CheckboxSet(text: 'Water Plant'),
+            const CheckboxSet(text: 'Send Message'),
+            const CheckboxSet(text: 'Clean Pot'),
+            // Continue Button
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 25),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Placeholder for navigation
+                  // Navigator.push(context, MaterialPageRoute(builder: (_) => NextPage()));
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
+                  backgroundColor: DailyReminder.brownText,
+                  foregroundColor: DailyReminder.greenBg,
+                  elevation: 0,
+                ),
+                child: const Text(
+                  'Continue',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _DailyReminderState extends State<DailyReminder> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    const DailyReminderHome(),
+    ViewFlowerPage(),
+    TutorialPage(),
+    MessagesPage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => _pages[index]),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: const DailyReminderHome(),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        backgroundColor: DailyReminder.greenBg,
+        selectedItemColor: const Color(0xFFF9ADA0),
+        unselectedItemColor: DailyReminder.brownText,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.check_box),
+            label: 'Daily Reminder',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.filter_vintage),
+            label: 'View Flower',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.info),
+            label: 'Tutorial',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.draw),
+            label: 'Message Maker',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CheckboxSet extends StatefulWidget {
+  final String text;
+
+  const CheckboxSet({super.key, required this.text});
+
+  @override
+  State<CheckboxSet> createState() => _CheckboxState();
+}
+
+class _CheckboxState extends State<CheckboxSet> {
+  bool isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return const Color(0xFFF9ADA0);
+      }
+      return DailyReminder.brownText;
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Checkbox(
+          checkColor: DailyReminder.greenBg,
+          fillColor: MaterialStateProperty.resolveWith(getColor),
+          value: isChecked,
+          onChanged: (bool? value) {
+            setState(() {
+              isChecked = value!;
+            });
+          },
+        ),
+        Text(
+          widget.text,
+          style: const TextStyle(fontSize: 16),
+        ),
+      ],
     );
   }
 }
