@@ -20,11 +20,11 @@ dependencies:
   flutter_svg: ^2.0.9
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.0.15 
+  flutter_reactive_ble: ^5.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_bluetooth_serial: ^0.4.0
   permission_handler: ^11.0.1
   flutter_lints: ^5.0.0
 
