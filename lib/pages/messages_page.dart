@@ -158,6 +158,7 @@ class _MessagePageState extends State<MessagesPage> with SingleTickerProviderSta
         if (selectedDateTime!.isAfter(DateTime.now())) {
           futureEntries[selectedDateTime!] = messageController.text;
           saveFutureEntries();
+          sendNotif();
         } else {
           itemsMap[selectedDateTime!] = messageController.text;
           prefs.setString(

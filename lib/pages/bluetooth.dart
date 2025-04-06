@@ -15,6 +15,12 @@ class BluetoothMessenger {
       return;
     }
 
+    // Request permissions before proceeding
+    if (!await _requestPermissions()) {
+      print("Permissions not granted. Cannot proceed.");
+      return;
+    }
+
     DiscoveredDevice? targetDevice;
 
     // Scan for the device
@@ -63,7 +69,57 @@ class BluetoothMessenger {
       }
     }
   }
+
+  Future<bool> _requestPermissions() async {
+    // Request Bluetooth and location permissions
+    final permissions = [
+      Permission.bluetoothScan,
+      Permission.bluetoothConnect,
+      Permission.location,
+    ];
+
+    final statuses = await permissions.request();
+
+    // Check if all permissions are granted
+    if (statuses.values.every((status) => status.isGranted)) {
+      return true;
+    } else {
+      // Show a dialog if permissions are denied
+      _showPermissionDialog();
+      return false;
+    }
+  }
+
+  void _showPermissionDialog() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: navigatorKey.currentContext!,
+        builder: (context) => AlertDialog(
+          title: const Text("Permissions Required"),
+          content: const Text(
+            "This app requires Bluetooth and location permissions to function properly. Please grant the necessary permissions.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                openAppSettings(); // Open app settings for the user to grant permissions
+              },
+              child: const Text("Open Settings"),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Cancel"),
+            ),
+          ],
+        ),
+      );
+    });
+  }
 }
+
+// Add a global navigator key to access the context for showing dialogs
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
 
