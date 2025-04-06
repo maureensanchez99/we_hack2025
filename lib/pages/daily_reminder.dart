@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_hack2025/pages/messages_page.dart';
 import 'package:we_hack2025/pages/tutorial_page.dart';
 import 'package:we_hack2025/pages/view_flower_page.dart';
@@ -189,11 +190,18 @@ class _CheckboxState extends State<CheckboxSet> {
         Checkbox(
           checkColor: DailyReminder.greenBg,
           fillColor: WidgetStateProperty.resolveWith(getColor),
-          value: manager.getCheckboxState("checkbox"),
-          onChanged: (value) {
-              setState(() {
-                manager.updateCheckboxState("checkbox", value ?? false);
-              });
+          value: isChecked,
+          onChanged: (bool? value) async {
+            setState(() {
+              isChecked = value ?? false;
+            });
+
+            if (isChecked) {
+              // Increment task count in SharedPreferences
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              int completedTasks = prefs.getInt('completedTasks') ?? 0;
+              prefs.setInt('completedTasks', completedTasks + 1);
+            }
           },
         ),
         Text(
