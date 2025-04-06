@@ -10,6 +10,6 @@ class _MessagePageState extends State<MessagesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Text("LeafySaga Info Page!");
+    return Text("Message Maker Page!");
   }
 }
