@@ -9,6 +9,14 @@ class DailyReminder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    void sendBlinkCommand() async {
+      final messenger = BluetoothMessenger();
+
+      // Send a single-character message (e.g., 'a')
+      await messenger.sendMessage("g");
+    }
+
     return Scaffold(
       backgroundColor: greenBg,
       body: Center(
@@ -19,7 +27,7 @@ class DailyReminder extends StatelessWidget {
               onPressed: () {
                 // Placeholder for navigation
                 // Navigator.push(context, MaterialPageRoute(builder: (_) => NextPage()));
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => BluetoothBleApp()));
+                sendBlinkCommand();
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
