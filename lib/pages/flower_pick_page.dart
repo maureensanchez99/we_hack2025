@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'view_flower_page.dart';
 
 class FlowerPickPage extends StatefulWidget {
@@ -12,6 +13,26 @@ class _FlowerPickPageState extends State<FlowerPickPage> {
 
   static const Color greenBg = Color(0xFFD7EAB4);
   static const Color brownText = Color(0xFF4F2027);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedFlower();
+  }
+
+  // Load the saved flower selection from SharedPreferences
+  Future<void> _loadSelectedFlower() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedFlower = prefs.getString('selectedFlower') ?? '';
+    });
+  }
+
+  // Save the flower selection to SharedPreferences
+  Future<void> _saveSelectedFlower(String flower) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('selectedFlower', flower);
+  }
 
   Widget buildDaisy(double size) {
     return Container(
@@ -117,6 +138,7 @@ class _FlowerPickPageState extends State<FlowerPickPage> {
           setState(() {
             selectedFlower = label;
           });
+          _saveSelectedFlower(label); // Save the selected flower
         },
         child: Column(
           mainAxisSize: MainAxisSize.min,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'daily_reminder.dart';
+import 'flower_pick_page.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -20,15 +20,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _loadPlantName();
   }
 
-  // load the saved plant name from shared preferences
+  // Load the saved plant name from shared preferences
   Future<void> _loadPlantName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _savedName = prefs.getString('plantName') ?? '';  
+      _savedName = prefs.getString('plantName') ?? '';
     });
   }
 
-  // save the plant name to shared preferences
+  // Save the plant name to shared preferences
   Future<void> _savePlantName(String name) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('plantName', name);
@@ -91,10 +91,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ElevatedButton(
               onPressed: () {
                 if (_savedName.isNotEmpty) {
-                  _savePlantName(_savedName); // save name to shared preferences
+                  _savePlantName(_savedName); // Save name to shared preferences
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => DailyReminder()),
+                    MaterialPageRoute(builder: (_) => FlowerPickPage()), // Navigate to FlowerPickPage
                   );
                 } else {
                   showDialog(
