@@ -24,7 +24,8 @@ class DailyReminderHome extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            // Title
+            const Text(
               'Daily Reminders:',
               style: TextStyle(
                 fontSize: 28,
@@ -32,8 +33,9 @@ class DailyReminderHome extends StatelessWidget {
                 color: DailyReminder.brownText,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 25),
+            // Subtitle
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 25),
               child: Text(
                 'Ensure your plant is healthy and loved!',
                 style: TextStyle(
@@ -43,18 +45,20 @@ class DailyReminderHome extends StatelessWidget {
                 ),
               ),
             ),
-            CheckboxSet(text: 'Water Plant'),
-            CheckboxSet(text: 'Send Message'),
-            CheckboxSet(text: 'Clean Pot'),
+            // Checkboxes
+            const CheckboxSet(text: 'Water Plant'),
+            const CheckboxSet(text: 'Send Message'),
+            const CheckboxSet(text: 'Clean Pot'),
+            // Continue Button
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 25),
               child: ElevatedButton(
                 onPressed: () {
                   // Placeholder for navigation
+                  // Navigator.push(context, MaterialPageRoute(builder: (_) => NextPage()));
                 },
                 style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
                   backgroundColor: DailyReminder.brownText,
                   foregroundColor: DailyReminder.greenBg,
                   elevation: 0,
@@ -79,7 +83,7 @@ class _DailyReminderState extends State<DailyReminder> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const DailyReminder(),
+    const DailyReminderHome(),
     ViewFlowerPage(),
     TutorialPage(),
     MessagesPage(),
@@ -98,16 +102,7 @@ class _DailyReminderState extends State<DailyReminder> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CheckboxSet(text: 'Water Plant'),
-            CheckboxSet(text: 'Send Message'),
-            CheckboxSet(text: 'Clean Pot'),
-          ],
-        ),
-      ),
+      body: const DailyReminderHome(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -151,11 +146,11 @@ class _CheckboxState extends State<CheckboxSet> {
 
   @override
   Widget build(BuildContext context) {
-    getColor(Set<WidgetState> states) {
-      const Set<WidgetState> interactiveStates = <WidgetState>{
-        WidgetState.pressed,
-        WidgetState.hovered,
-        WidgetState.focused,
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
       };
       if (states.any(interactiveStates.contains)) {
         return const Color(0xFFF9ADA0);
@@ -168,7 +163,7 @@ class _CheckboxState extends State<CheckboxSet> {
       children: [
         Checkbox(
           checkColor: DailyReminder.greenBg,
-          fillColor: WidgetStateProperty.resolveWith(getColor),
+          fillColor: MaterialStateProperty.resolveWith(getColor),
           value: isChecked,
           onChanged: (bool? value) {
             setState(() {

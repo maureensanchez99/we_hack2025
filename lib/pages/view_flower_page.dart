@@ -17,7 +17,7 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
 
   final List<Widget> _pages = [
     const DailyReminder(),
-    ViewFlowerPage(), // Fixed: Added `const` to avoid infinite recursion
+    ViewFlowerPage(),
     TutorialPage(),
     MessagesPage(),
   ];
@@ -49,6 +49,7 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: DailyReminder.greenBg, // Set green background
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -58,6 +59,7 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
               style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w800,
+                color: DailyReminder.brownText, // Set brown text color
               ),
             ),
             const SizedBox(height: 100),
@@ -74,6 +76,7 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
+                    color: DailyReminder.brownText, // Set brown text color
                   ),
                 ),
               ),
@@ -84,9 +87,9 @@ class _ViewFlowerPageState extends State<ViewFlowerPage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        backgroundColor: DailyReminder.greenBg,
+        backgroundColor: DailyReminder.greenBg, // Set green background
         selectedItemColor: const Color(0xFFF9ADA0),
-        unselectedItemColor: DailyReminder.brownText,
+        unselectedItemColor: DailyReminder.brownText, // Set brown text color
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.check_box),
