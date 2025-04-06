@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/welcome_page.dart';
+import 'pages/connection_setup.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
           headlineSmall: TextStyle(fontFamily: 'Inter'),
         ),
       ),
-      home: const WelcomeScreen(),
+      //home: const WelcomeScreen(),
+      home: ConnectionSetupPage(),
     );
   }
 }
