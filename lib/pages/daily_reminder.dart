@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+//import 'package:flutter_svg/flutter_svg.dart';
 import 'package:we_hack2025/pages/flower_pick_page.dart';
 
 class DailyReminder extends StatelessWidget {
@@ -69,9 +69,7 @@ class _CheckboxState extends State<CheckboxSet> {
     // person.name = 'Shilpa';
     // String newString = 'This is my name: ${person.name}';
 
-    String 
-
-    Color; getColor(Set<WidgetState> states) {
+    getColor(Set<WidgetState> states) {
       const Set<WidgetState> interactiveStates = <WidgetState> {
         WidgetState.pressed,
         WidgetState.hovered,
@@ -86,11 +84,11 @@ class _CheckboxState extends State<CheckboxSet> {
     }
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Checkbox(
           checkColor: Colors.white,
-          fillColor: MaterialStateProperty.resolveWith(getColor),
+          fillColor: WidgetStateProperty.resolveWith(getColor),
           value: isChecked,
           onChanged: (bool? value) {
             setState(() {
@@ -98,9 +96,17 @@ class _CheckboxState extends State<CheckboxSet> {
             });
           },
         ),
-        Text(
-          widget.text,
-          style: const TextStyle(fontSize: 16),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.text,
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
         ),
       ],
     );
