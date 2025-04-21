@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../services/connection_manager.dart';
 
 class BluetoothMessenger {
   final FlutterReactiveBle _ble = FlutterReactiveBle();
@@ -124,181 +125,180 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
 /*ORIGINAL TESTER - FUNCTIONAL*/
-// class BluetoothBleApp extends StatefulWidget {
-//   @override
-//   _BluetoothBleAppState createState() => _BluetoothBleAppState();
-// }
+class BluetoothBleApp extends StatefulWidget {
+  @override
+  _BluetoothBleAppState createState() => _BluetoothBleAppState();
+}
 
-// class _BluetoothBleAppState extends State<BluetoothBleApp> {
-//   final FlutterReactiveBle _ble = FlutterReactiveBle();
-//   late Stream<DiscoveredDevice> _scanStream;
-//   DiscoveredDevice? _selectedDevice;
-//   bool _isScanning = false;
-//   bool _isConnected = false;
-//   late Stream<ConnectionStateUpdate> _connectionStream;
-//   late QualifiedCharacteristic _characteristic;
+class _BluetoothBleAppState extends State<BluetoothBleApp> {
+  final FlutterReactiveBle _ble = FlutterReactiveBle();
+  late Stream<DiscoveredDevice> _scanStream;
+  DiscoveredDevice? _selectedDevice;
+  bool _isScanning = false;
+  bool _isConnected = false;
+  late Stream<ConnectionStateUpdate> _connectionStream;
+  late QualifiedCharacteristic _characteristic;
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _requestPermissions();
-//   }
+  @override
+  void initState() {
+    super.initState();
+    _requestPermissions();
+  }
 
-//   Future<void> _requestPermissions() async {
-//     await [
-//       Permission.bluetoothScan,
-//       Permission.bluetoothConnect,
-//       Permission.location,
-//     ].request();
-//   }
+  Future<void> _requestPermissions() async {
+    await [
+      Permission.bluetoothScan,
+      Permission.bluetoothConnect,
+      Permission.location,
+    ].request();
+  }
 
-//   void _startScan() {
-//     setState(() {
-//       _isScanning = true;
-//     });
+  void _startScan() {
+    setState(() {
+      _isScanning = true;
+    });
 
-//     _scanStream = _ble.scanForDevices(withServices: []);
-//     _scanStream.listen((device) {
-//       if (device.name == "HMSoft") {
-//         setState(() {
-//           _selectedDevice = device;
-//           _isScanning = false; // Stop scanning once the device is found
-//         });
-//         _connectToDevice(); // Automatically connect to the device
-//       }
-//     }).onDone(() {
-//       setState(() {
-//         _isScanning = false;
-//       });
-//       if (_selectedDevice == null) {
-//         _showNoDeviceFoundDialog(); // Show a dialog if no "HMSoft" device is found
-//       }
-//     });
-//   }
+    _scanStream = _ble.scanForDevices(withServices: []);
+    _scanStream.listen((device) {
+      if (device.name == "HMSoft") {
+        setState(() {
+          _selectedDevice = device;
+          _isScanning = false; // Stop scanning once the device is found
+        });
+        _connectToDevice(); // Automatically connect to the device
+      }
+    }).onDone(() {
+      setState(() {
+        _isScanning = false;
+      });
+      if (_selectedDevice == null) {
+        _showNoDeviceFoundDialog(); // Show a dialog if no "HMSoft" device is found
+      }
+    });
+  }
 
-//   void _showNoDeviceFoundDialog() {
-//     showDialog(
-//       context: context,
-//       builder: (context) {
-//         return AlertDialog(
-//           title: Text("Device Not Found"),
-//           content: Text("No device named 'HMSoft' was found."),
-//           actions: [
-//             TextButton(
-//               onPressed: () => Navigator.pop(context),
-//               child: Text("Close"),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
+  void _showNoDeviceFoundDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Device Not Found"),
+          content: Text("No device named 'HMSoft' was found."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-//   void _connectToDevice() async {
-//     if (_selectedDevice == null) return;
+  void _connectToDevice() async {
+    if (_selectedDevice == null) return;
 
-//     setState(() {
-//       _isConnected = false;
-//     });
+    setState(() {
+      _isConnected = false;
+    });
 
-//     _connectionStream = _ble.connectToDevice(
-//       id: _selectedDevice!.id,
-//       connectionTimeout: const Duration(seconds: 10),
-//     );
+    _connectionStream = _ble.connectToDevice(
+      id: _selectedDevice!.id,
+      connectionTimeout: const Duration(seconds: 10),
+    );
 
-//     _connectionStream.listen((event) {
-//       if (event.connectionState == DeviceConnectionState.connected) {
-//         setState(() {
-//           _isConnected = true;
-//         });
+    _connectionStream.listen((event) {
+      if (event.connectionState == DeviceConnectionState.connected) {
+        setState(() {
+          _isConnected = true;
+        });
 
-//         // Define the characteristic for communication (update UUIDs as needed)
-//         _characteristic = QualifiedCharacteristic(
-//           serviceId: Uuid.parse("0000180A-0000-1000-8000-00805f9b34fb"), // Example service UUID
-//           characteristicId: Uuid.parse("00002A57-0000-1000-8000-00805f9b34fb"), // Example characteristic UUID
-//           deviceId: _selectedDevice!.id,
-//         );
-//       } else if (event.connectionState == DeviceConnectionState.disconnected) {
-//         setState(() {
-//           _isConnected = false;
-//         });
-//       }
-//     });
-//   }
+        // Define the characteristic for communication (update UUIDs as needed)
+        _characteristic = QualifiedCharacteristic(
+          serviceId: Uuid.parse("0000180A-0000-1000-8000-00805f9b34fb"), // Example service UUID
+          characteristicId: Uuid.parse("00002A57-0000-1000-8000-00805f9b34fb"), // Example characteristic UUID
+          deviceId: _selectedDevice!.id,
+        );
+      } else if (event.connectionState == DeviceConnectionState.disconnected) {
+        setState(() {
+          _isConnected = false;
+        });
+      }
+    });
+  }
 
-//   void _sendData(String data) async {
-//     if (_isConnected) {
-//       final bytes = data.codeUnits;
-//       await _ble.writeCharacteristicWithResponse(_characteristic, value: bytes);
-//       print("Data sent: $data");
-//     }
-//   }
+  void _sendData(String data) async {
+    final connectionManager = ConnectionManager.instance;
+    if (connectionManager.isConnected) {
+      await connectionManager.sendMessage(data);
+      print("Data sent: $data");
+    } else {
+      print("No device connected.");
+    }
+  }
 
-//   void _disconnect() async {
-//     if (_selectedDevice != null) {
-//       await _ble.clearGattCache(_selectedDevice!.id);
-//       setState(() {
-//         _isConnected = false;
-//         _selectedDevice = null;
-//       });
-//     }
-//   }
+  void _disconnect() async {
+    final connectionManager = ConnectionManager.instance;
+    await connectionManager.disconnect();
+    setState(() {});
+  }
 
-//   void discoverServices() async {
-//     if (_selectedDevice == null) {
-//       print("No device selected.");
-//       return;
-//     }
+  void discoverServices() async {
+    if (_selectedDevice == null) {
+      print("No device selected.");
+      return;
+    }
 
-//     final services = await _ble.discoverServices(_selectedDevice!.id);
-//     for (var service in services) {
-//       print('Service UUID: ${service.serviceId}');
-//       for (var characteristic in service.characteristics) {
-//         print('  Characteristic UUID: ${characteristic.characteristicId}');
-//         print('  Properties: '
-//             'read: ${characteristic.isReadable}, '
-//             'write: ${characteristic.isWritableWithResponse || characteristic.isWritableWithoutResponse}, '
-//             'notify: ${characteristic.isNotifiable}');
-//       }
-//     }
-//   }
+    final services = await _ble.discoverServices(_selectedDevice!.id);
+    for (var service in services) {
+      print('Service UUID: ${service.serviceId}');
+      for (var characteristic in service.characteristics) {
+        print('  Characteristic UUID: ${characteristic.characteristicId}');
+        print('  Properties: '
+            'read: ${characteristic.isReadable}, '
+            'write: ${characteristic.isWritableWithResponse || characteristic.isWritableWithoutResponse}, '
+            'notify: ${characteristic.isNotifiable}');
+      }
+    }
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('BLE: HMSoft Connection'),
-//         actions: [
-//           if (_isConnected)
-//             IconButton(
-//               icon: Icon(Icons.power_settings_new),
-//               onPressed: _disconnect,
-//             ),
-//         ],
-//       ),
-//       body: Center(
-//         child: _isConnected
-//             ? Column(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   Text("Connected to: ${_selectedDevice?.name ?? 'Device'}"),
-//                   SizedBox(height: 20),
-//                   ElevatedButton(
-//                     onPressed: () => _sendData('a'),
-//                     child: Text("Send Blink"),
-//                   ),
-//                 ],
-//               )
-//             : Column(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   ElevatedButton(
-//                     onPressed: _isScanning ? null : _startScan,
-//                     child: Text(_isScanning ? "Scanning..." : "Scan for HMSoft"),
-//                   ),
-//                 ],
-//               ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    final connectionManager = ConnectionManager.instance;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('BLE: HMSoft Connection'),
+        actions: [
+          if (connectionManager.isConnected)
+            IconButton(
+              icon: Icon(Icons.power_settings_new),
+              onPressed: _disconnect,
+            ),
+        ],
+      ),
+      body: Center(
+        child: connectionManager.isConnected
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Connected to: ${_selectedDevice?.name ?? 'Device'}"),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () => _sendData('a'),
+                    child: Text("Send Blink"),
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: _isScanning ? null : _startScan,
+                    child: Text(_isScanning ? "Scanning..." : "Scan for HMSoft"),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+}

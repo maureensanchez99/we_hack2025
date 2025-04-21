@@ -169,6 +169,9 @@ class _MessagePageState extends State<MessagesPage> with SingleTickerProviderSta
         messageController.clear();
         selectedDateTime = null;
       });
+
+      // Send 'm' to the Bluetooth connection
+      sendNotif();
     }
   }
 
